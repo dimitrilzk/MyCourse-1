@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using MyCourse.Models.Exceptions;
+using MyCourse.Models.Exceptions.Application;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.ViewModels;
@@ -87,6 +87,10 @@ namespace MyCourse.Controllers
                 catch (CourseTitleUnavailableException)
                 {
                     ModelState.AddModelError(nameof(CourseEditInputModel.Title), "Questo titolo già esiste");
+                }
+                catch (OptimisticConcurrencyException)
+                {
+                    ModelState.AddModelError("", "Spiacenti, il salvataggio non è andato a buon fine perché nel frattempo un altro utente ha aggionato il corso. Ti preghiamo di aggiornare la pagina e ripetere le modifiche.");
                 }
             }
 

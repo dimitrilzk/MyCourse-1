@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyCourse.Models.Entities;
-using MyCourse.Models.Exceptions;
+using MyCourse.Models.Exceptions.Application;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Infrastructure;
@@ -151,6 +151,7 @@ namespace MyCourse.Models.Services.Application
             course.ChangePrices(inputModel.FullPrice, inputModel.CurrentPrice);
             course.ChangeDescription(inputModel.Description);
             course.ChangeEmail(inputModel.Email);
+            dbContext.Entry(course).Property(course => course.RowVersion).OriginalValue = inputModel.RowVersion;
             
             if (inputModel.Image != null)
             {
@@ -169,6 +170,10 @@ namespace MyCourse.Models.Services.Application
             try
             {
                 await dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new OptimisticConcurrencyException();
             }
             catch (DbUpdateException exc) when ((exc.InnerException as SqliteException)?.SqliteErrorCode == 19)
             {
