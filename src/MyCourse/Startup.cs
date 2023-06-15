@@ -14,6 +14,7 @@ using MyCourse.Customizations.ModelBinders;
 using MyCourse.Models.Enums;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Application;
+using MyCourse.Models.Services.Application.Lesson;
 using MyCourse.Models.Services.Infrastructure;
 
 namespace MyCourse
@@ -49,6 +50,8 @@ namespace MyCourse
             #endif
             ;
 
+            services.AddTransient<ILessonService, LessonService>();
+
             //Usiamo ADO.NET o Entity Framework Core per l'accesso ai dati?
             var persistence = Persistence.EfCore;
             switch (persistence)
@@ -66,6 +69,7 @@ namespace MyCourse
                 });
                 break;
             }
+            services.AddTransient<ILessonService, EfCoreLessonService>();
 
             services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
             services.AddSingleton<IImagePersister, MagickNetImagePersister>();

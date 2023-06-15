@@ -1,0 +1,33 @@
+﻿@model LessonCreateInputModel;
+@{
+}
+<h1 class="text-center">@ViewData["Title"]</h1>
+<form method="post">
+    <div class="row">
+        <div class="col-12">
+            <!--
+            Questa view dimostra l'uso sia dell'asp-validation-summary che dell'asp-validation-for
+            Perciò gli errori di validazione verranno visualizzati due volte
+            -->
+            <div asp-validation-summary="All"></div>
+        </div>
+    </div>
+    <div class="row">
+        <input type="hidden" asp-for="courseId" />
+        <div class="col-md-12 mb-3">
+            <input type="text"  class="form-control form-control-lg" asp-for="Title" placeholder="Digita il nome della lezione...">
+            @*<span asp-validation-for="Title"></span>*@
+        </div>
+        <div class="col-md-12 mb-3">
+            <input type="text" class="form-control form-control-lg" asp-for="Description" placeholder="Aggiungi una descrizione...">
+            @*<span asp-validation-for="Title"></span>*@
+        </div>
+        <div class="col-md-4 mb-3">
+            <input type="number" class="form-control form-control-lg" asp-for="Duration" placeholder="Inserisci una durata stimata...">
+            @*<span asp-validation-for="Title"></span>*@
+        </div>
+        <div class="col-md-8">
+            <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="fas fa-rocket"></i> Crea lezione!</button>
+        </div>
+    </div>
+</form>

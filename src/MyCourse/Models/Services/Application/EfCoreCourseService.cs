@@ -141,7 +141,7 @@ namespace MyCourse.Models.Services.Application
         public async Task<CourseDetailViewModel> EditCourseAsync(CourseEditInputModel inputModel)
         {
             Course course = await dbContext.Courses.FindAsync(inputModel.Id);
-            
+
             if (course == null)
             {
                 throw new CourseNotFoundException(inputModel.Id);
@@ -152,14 +152,15 @@ namespace MyCourse.Models.Services.Application
             course.ChangeDescription(inputModel.Description);
             course.ChangeEmail(inputModel.Email);
             dbContext.Entry(course).Property(course => course.RowVersion).OriginalValue = inputModel.RowVersion;
-            
+
             if (inputModel.Image != null)
             {
-                try {
+                try
+                {
                     string imagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
                     course.ChangeImagePath(imagePath);
                 }
-                catch(Exception exc)
+                catch (Exception exc)
                 {
                     throw new CourseImageInvalidException(inputModel.Id, exc);
                 }

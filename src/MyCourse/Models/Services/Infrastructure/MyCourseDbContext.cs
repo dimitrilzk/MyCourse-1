@@ -25,19 +25,22 @@ namespace MyCourse.Models.Services.Infrastructure
                 entity.ToTable("Courses"); //Superfluo se la tabella si chiama come la proprietà che espone il DbSet
                 entity.HasKey(course => course.Id); //Superfluo se la proprietà si chiama Id oppure CoursesId
                 //entity.HasKey(course => new { course.Id, course.Author }); //Per chiavi primarie composite (è importante rispettare l'ordine dei campi)
-
+                entity.HasIndex(course => course.Title).IsUnique();
                 //Mapping per gli owned types
                 entity.OwnsOne(course => course.CurrentPrice, builder => {
                     builder.Property(money => money.Currency)
                     .HasConversion<string>()
                     .HasColumnName("CurrentPrice_Currency"); //Superfluo perché le nostre colonne seguono già la convenzione di nomi
-                    builder.Property(money => money.Amount).HasColumnName("CurrentPrice_Amount").HasConversion<float>(); //Superfluo perché le nostre colonne seguono già la convenzione di nomi
+                    builder.Property(money => money.Amount)
+                    .HasColumnName("CurrentPrice_Amount")
+                    .HasConversion<float>(); //Superfluo perché le nostre colonne seguono già la convenzione di nomi
                 });
 
                 entity.Property(course => course.RowVersion).IsRowVersion();
                 
                 entity.OwnsOne(course => course.FullPrice, builder => {
-                    builder.Property(money => money.Currency).HasConversion<string>();
+                    builder.Property(money => money.Currency)
+                    .HasConversion<string>();
                 });
 
                 //Mapping per le relazioni

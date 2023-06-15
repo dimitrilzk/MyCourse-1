@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using AngleSharp.Dom.Html;
-using Ganss.XSS;
+using AngleSharp.Html.Dom;
+using Ganss.Xss;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace MyCourse.Customizations.TagHelpers
